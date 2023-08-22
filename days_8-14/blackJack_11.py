@@ -29,9 +29,9 @@ dealer_cards = [deal_card(), deal_card()]
 
 
 # Does someone have a blackJack?
-def check_blackjack(players_cards):
+def check_blackjack(players_card):
     has_blackjack = False
-    if 11 in player_cards and 10 in player_cards:
+    if 11 in players_card and 10 in players_card:
         has_blackjack = True
     return has_blackjack
 
