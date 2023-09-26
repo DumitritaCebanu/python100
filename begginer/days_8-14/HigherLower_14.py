@@ -8,10 +8,10 @@ import random
 #     print("---------------------------------------------------------------------------------------------")
 
 # print(len(HigherLower_gameData.data))
+first_player = random.choice(HigherLower_gameData.data)
+second_player = random.choice(HigherLower_gameData.data)
 
-while len(HigherLower_gameData.data) > 45:
-    first_player = random.choice(HigherLower_gameData.data)
-    second_player = random.choice(HigherLower_gameData.data)
+while len(HigherLower_gameData.data) > 0:
 
     print(f"{first_player['name']} - {first_player['description']}from {first_player['country']}")
     print(f"{second_player['name']} - {second_player['description']}from {second_player['country']}")

@@ -38,14 +38,14 @@ coins = {
 }
 
 
-# TODO: 3. process coins
+# . process coins
 def calculate_money(penny, dime, nickel, quarter, coffee_type):
     suma = coins['penny'] * penny + coins['dime'] * dime + coins['nickel'] * nickel + coins['quarter'] * quarter
     rest = 0
     if suma > menu[coffee_type]['cost']:
         rest = suma - menu[coffee_type]['cost']
         print(f"Transaction accepted, enjoy your {coffee_type}")
-        print(f"Here is {round(rest,2)} in change from {suma}")
+        print(f"Here is {round(rest, 2)} in change from {suma}")
     elif suma < menu[coffee_type]['cost']:
         print(f"Insufficient money, here is your refund - {suma}")
         print(suma)
@@ -53,7 +53,7 @@ def calculate_money(penny, dime, nickel, quarter, coffee_type):
         print(f"Transaction accepted, enjoy your {coffee_type}")
 
 
-# TODO: 2. check sufficient resources
+# . check sufficient resources
 def check_water(coffee_type):
     if menu[coffee_type]['ingredients']['water_qnt'] <= machine_resources['water']:
         return True
@@ -90,7 +90,7 @@ def reduce_milk_qnt(coffee_type):
     machine_resources['milk'] -= menu[coffee_type]['ingredients']['milk_qnt']
 
 
-# TODO: 1. print report - how many resources have left
+# . print report - how many resources have left
 def print_report():
     return print(f"Water: {machine_resources['water']} ml\n"
                  f"Milk: {machine_resources['milk']} ml\n"
@@ -98,10 +98,47 @@ def print_report():
                  f"Money: ${machine_resources['money']} $\n")
 
 
-# TODO: 4. check transaction successful
-# TODO: 5. make the coffee
+def proces_choice(coffe_type):
+    if coffe_type == 'espresso':
+        if check_water(coffe_type) and check_coffee(coffe_type):
+            print(f"The {coffe_type} is {menu[coffe_type]['cost']}$")
+            print("Please insert coins\n")
+            quarters = int(input("how many quarters?(0.25) "))
+            dimes = int(input("how many dimes?(0.1) "))
+            nickels = int(input("how many nickels?(0.05) "))
+            pennies = int(input("how many pennies?(0.01) "))
+            calculate_money(pennies, dimes, nickels, quarters, coffe_type)
 
-coffee_machine_status = "on"
+            reduce_water_qnt(coffe_type)
+            reduce_coffee_qnt(coffe_type)
+            machine_resources['money'] += menu[coffe_type]['cost']
+
+            return True
+        else:
+            return False
+    elif coffe_type == 'latte' or coffe_type == 'cappuccino':
+        if check_water(coffe_type) and check_coffee(coffe_type) and check_milk(coffe_type):
+            print(f"The {coffe_type} is {menu[coffe_type]['cost']}$")
+            print("Please insert coins\n")
+            quarters = int(input("how many quarters?(0.25) "))
+            dimes = int(input("how many dimes?(0.1) "))
+            nickels = int(input("how many nickels?(0.05) "))
+            pennies = int(input("how many pennies?(0.01) "))
+            calculate_money(pennies, dimes, nickels, quarters, coffe_type)
+
+            reduce_water_qnt(coffe_type)
+            reduce_coffee_qnt(coffe_type)
+            reduce_milk_qnt(coffe_type)
+            machine_resources['money'] += menu[coffe_type]['cost']
+
+            return True
+        else:
+            return False
+
+
+coffee_machine_status = 'on'
+# . check transaction successful
+# . make the coffee
 
 while coffee_machine_status == "on":
 
@@ -114,59 +151,23 @@ while coffee_machine_status == "on":
         break
 
     if choice == "espresso":
-        if check_water('espresso') and check_coffee('espresso'):
-            print(f"The espresso is {menu['espresso']['cost']}$")
-            print("Please insert coins\n")
-            quarters = int(input("how many quarters?(0.25) "))
-            dimes = int(input("how many dimes?(0.1) "))
-            nickels = int(input("how many nickels?(0.05) "))
-            pennies = int(input("how many pennies?(0.01) "))
-            calculate_money(pennies, dimes, nickels, quarters, 'espresso')
-
-            reduce_water_qnt('espresso')
-            reduce_coffee_qnt('espresso')
-            machine_resources['money'] += menu['espresso']['cost']
-            # print(machine_resources)
+        if proces_choice('espresso'):
+            continue
         else:
-            coffee_machine_status = 'off'
+            coffee_machine_status = "off"
     if choice == "latte":
-        if check_water('latte') and check_coffee('latte') and check_milk('latte'):
-            print(f"The latte is {menu['latte']['cost']}$")
-            print("Please insert coins\n")
-            quarters = int(input("how many quarters?(0.25) "))
-            dimes = int(input("how many dimes?(0.1) "))
-            nickels = int(input("how many nickels?(0.05) "))
-            pennies = int(input("how many pennies?(0.01) "))
-            calculate_money(pennies, dimes, nickels, quarters, 'latte')
-
-            reduce_water_qnt('latte')
-            reduce_coffee_qnt('latte')
-            reduce_milk_qnt('latte')
-            machine_resources['money'] += menu['latte']['cost']
-            # print(machine_resources)
+        if proces_choice('latte'):
+            continue
         else:
-            coffee_machine_status = 'off'
+            coffee_machine_status = "off"
     if choice == "cappuccino":
-        if check_water('cappuccino') and check_coffee('cappuccino') and check_milk('cappuccino'):
-            print(f"The cappuccino is {menu['cappuccino']['cost']}$")
-            print("Please insert coins\n")
-            quarters = int(input("how many quarters?(0.25) "))
-            dimes = int(input("how many dimes?(0.1) "))
-            nickels = int(input("how many nickels?(0.05) "))
-            pennies = int(input("how many pennies?(0.01) "))
-            calculate_money(pennies, dimes, nickels, quarters, 'cappuccino')
-
-            reduce_water_qnt('cappuccino')
-            reduce_coffee_qnt('cappuccino')
-            reduce_milk_qnt('cappuccino')
-            machine_resources['money'] += menu['cappuccino']['cost']
-            # print(machine_resources)
+        if proces_choice('cappuccino'):
+            continue
         else:
-            coffee_machine_status = 'off'
+            coffee_machine_status = "off"
 
     if choice == "report":
         print_report()
 
-    if choice != 'espresso' or choice != 'latte' or choice != 'cappuccino' or choice != 'report':
-        print("Invalid input")
-
+    # if choice != 'espresso' or choice != 'latte' or choice != 'cappuccino' or choice != 'report':
+    #     print("Invalid input")
